@@ -11,7 +11,6 @@ repository = "https://github.com/mwesterm/ms5611-i2c"  # The URL of the package'
 categories = [
   "embedded",  # The package categories
   "no-std",
-  "hardware-support",
   "ms5611",
   "embassy-hal",
   "async",
