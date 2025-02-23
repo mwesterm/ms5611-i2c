@@ -1,0 +1,78 @@
+# This is the Cargo.toml file for the ms5611-i2c project.
+
+[package]
+# Package metadata
+name = "ms5611-i2c"  # The name of the package
+version = "0.1.0"  # The current version of the package
+authors = ["Martin Westermeier <mwesterm@mailbox.org>"]  # The authors of the package
+license = "MIT OR Apache-2.0"  # The license under which the package is distributed
+description = "no_std Library for the MS5611 barometric pressure sensor only for I2C with embassy"  # A short description of the package
+repository = "https://github.com/mwesterm/ms5611-i2c"  # The URL of the package's source repository
+categories = [
+  "embedded",  # The package categories
+  "no-std",
+  "hardware-support",
+  "ms5611",
+  "embassy-hal",
+  "async",
+]
+keywords = ["ms5611", "embassy-hal", "i2c", "async"]  # Keywords for the package
+edition = "2024"  # The Rust edition used by the package
+readme = "README.md"  # The path to the README file
+
+[dependencies]
+# Dependencies for the package
+embedded-hal-bus = { version = "0.3" }  # Hardware Abstraction Layer for bus
+embedded-hal-async = { version = "1.0", optional = true }  # Async version of embedded-hal
+embedded-hal = { version = "1.0", optional = true }  # Embedded Hardware Abstraction Layer
+embassy-futures = "0.1.1"  # Futures for the Embassy framework
+embassy-time = { version = "0.4" }  # Time utilities for the Embassy framework
+byteorder = { version = "1.1.0", default-features = false }  # Utilities for working with byte order
+maybe-async = "0.2"  # Conditional async/await support
+
+[target.riscv32imc-unknown-none-elf.dev-dependencies]
+# Development dependencies for the RISC-V target
+esp-alloc = { version = "0.6.0" }  # Memory allocator for ESP32
+esp-println = { version = "0.13.0", features = ["esp32c3", "log"] }  # Println macro for ESP32
+esp-hal = { version = "0.23.1", features = ["esp32c3", "unstable"] }  # Hardware Abstraction Layer for ESP32
+esp-hal-embassy = { version = "0.6.0", features = ["esp32c3"] }  # Embassy support for ESP32 HAL
+embassy-executor = { version = "0.7.0", features = ["task-arena-size-12288"] }  # Executor for the Embassy framework
+esp-backtrace = { version = "0.15.0", features = [
+  "esp32c3",  # Backtrace support for ESP32
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+log = { version = "0.4.26" }  # Logging library
+
+[features]
+# Feature flags for conditional compilation
+default = ["is_sync"]  # Default features
+is_async = ["dep:embedded-hal-async", "embedded-hal-bus/async"]  # Async feature
+is_sync = ["dep:embedded-hal", "maybe-async/is_sync"]  # Sync feature
+
+[[example]]
+# Example for synchronous usage on ESP32-C3
+name = "esp32-c3-sync"
+path = "examples/esp32-c3-sync.rs"
+required-features = ["is_sync"]
+
+[[example]]
+# Example for asynchronous usage on ESP32-C3
+name = "esp32-c3-async"
+path = "examples/esp32-c3-async.rs"
+required-features = ["is_async"]
+
+[profile.dev]
+# Development build profile
+opt-level = "s"  # Optimization level for debug builds
+
+[profile.release]
+# Release build profile
+codegen-units = 1  # Use a single codegen unit for better optimizations
+debug = 2  # Include debug information
+debug-assertions = false  # Disable debug assertions
+incremental = false  # Disable incremental compilation
+lto = 'fat'  # Enable link-time optimization
+opt-level = 's'  # Optimization level for release builds
+overflow-checks = false  # Disable overflow checks

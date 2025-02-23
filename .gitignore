@@ -1,0 +1,9 @@
+
+*~
+*.swp
+/.idea
+/target
+**/*.rs.bk
+Cargo.lock
+.vscode
+ms5611-i2c.code-workspace
