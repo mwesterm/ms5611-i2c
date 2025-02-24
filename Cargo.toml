@@ -15,6 +15,7 @@ categories = [
 ]
 keywords = ["ms5611", "embassy-hal", "i2c", "async"]  # Keywords for the package
 edition = "2021"  # The Rust edition used by the package
+rust-version = "1.81"
 readme = "README.md"  # The path to the README file
 
 [dependencies]

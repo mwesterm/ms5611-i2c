@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.85
+      - uses: dtolnay/rust-toolchain@1.81
         with:
           components: rustfmt
       - run: cargo fmt --all -- --check
@@ -24,7 +24,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.85
+      - uses: dtolnay/rust-toolchain@1.81
       - run: cargo test --lib --target x86_64-unknown-linux-gnu
       - run: cargo test --doc --target x86_64-unknown-linux-gnu
 
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-            toolchain: 1.75
+            toolchain: 1.81
       - run: cargo build --lib --target x86_64-unknown-linux-gnu
       - run: cargo build --lib --target x86_64-unknown-linux-gnu --features is_async
       - run: cargo doc --target x86_64-unknown-linux-gnu
