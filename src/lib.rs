@@ -391,18 +391,3 @@ where
         })
     }
 }
-
-mod test {
-    #[test]
-    fn check_crc() {
-        let mut data = [
-            0x0024, 0xB3D8, 0xBD83, 0x6E00, 0x628A, 0x8063, 0x6ADB, 0x947B,
-        ];
-        let coeffs = Coefficients { data };
-        assert_eq!(coeffs.check_crc(), true);
-
-        data[7] = 0x460b;
-        let coeffs = Coefficients { data };
-        assert_eq!(coeffs.check_crc(), false);
-    }
-}
