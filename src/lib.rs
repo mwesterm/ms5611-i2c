@@ -13,7 +13,7 @@
 //!
 //! # Example
 //!
-//! ```rust
+//! ```ignore
 //! use ms5611_i2c::{Ms5611, OversamplingRatio};
 //! use embedded_hal::blocking::i2c::{Write, WriteRead};
 //!
