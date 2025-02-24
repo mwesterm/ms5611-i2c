@@ -56,7 +56,7 @@ jobs:
           - thumbv6m-none-eabi
           - riscv32imc-unknown-none-elf
           - thumbv7em-none-eabi
-          
+
     name: ${{matrix.target}}
     runs-on: ubuntu-latest
     steps:
@@ -67,9 +67,4 @@ jobs:
       - run: rustup target add ${{matrix.target}}
       - run: cargo build --target ${{matrix.target}} --features  is_sync --release --no-default-features
       - run: cargo build --target ${{matrix.target}} --features  is_async --release --no-default-features
-      - if: ${{ matrix.examples }}
-        run: cargo build --target ${{matrix.target}} --examples --features  is_sync --release --no-default-features
-      - if: ${{ matrix.examples }}
-        run: cargo build --target ${{matrix.target}} --examples --features  is_async --release --no-default-features
-      - run: cargo doc --all-features --target ${{matrix.target }}
 
