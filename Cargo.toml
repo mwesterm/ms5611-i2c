@@ -11,9 +11,7 @@ repository = "https://github.com/mwesterm/ms5611-i2c"  # The URL of the package'
 categories = [
   "embedded",  # The package categories
   "no-std",
-  "ms5611",
-  "embassy-hal",
-  "async",
+  "hardware-support",
 ]
 keywords = ["ms5611", "embassy-hal", "i2c", "async"]  # Keywords for the package
 edition = "2024"  # The Rust edition used by the package
