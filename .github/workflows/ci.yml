@@ -37,9 +37,9 @@ jobs:
         with:
             toolchain: 1.81
       - run: cargo build --lib --target x86_64-unknown-linux-gnu 
-      - run: cargo build --lib --target x86_64-unknown-linux-gnu --features is_async  --no-default-features
+      - run: cargo build --lib --target x86_64-unknown-linux-gnu --features async  --no-default-features
       - run: cargo doc --target x86_64-unknown-linux-gnu
-      - run: cargo doc --target x86_64-unknown-linux-gnu --features is_async --no-default-features
+      - run: cargo doc --target x86_64-unknown-linux-gnu --features async --no-default-features
 
   build:
     strategy:
@@ -65,6 +65,6 @@ jobs:
         with:
           components: rustfmt
       - run: rustup target add ${{matrix.target}}
-      - run: cargo build --target ${{matrix.target}} --features  is_sync --release --no-default-features
-      - run: cargo build --target ${{matrix.target}} --features  is_async --release --no-default-features
+      - run: cargo build --target ${{matrix.target}} --features  sync --release --no-default-features
+      - run: cargo build --target ${{matrix.target}} --features  async --release --no-default-features
 

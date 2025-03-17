@@ -30,17 +30,17 @@ async fn main(_spawner: embassy_executor::Spawner) {
     .with_scl(peripherals.GPIO7)
     .into_async();
 
-    let mut sensor = Ms5611::new(i2c, None).await;
+    if let Ok(mut sensor) = Ms5611::new(i2c, None).await {
+        loop {
+            let pressure = sensor
+                .read_sample(ms5611_i2c::OversamplingRatio::Opt512)
+                .await;
 
-    loop {
-        let pressure = sensor
-            .read_sample(ms5611_i2c::OversamplingRatio::Opt512)
-            .await;
+            // Do something with the temperature and pressure values
+            // For example, print them to a serial console (if available)
+            info!("Pressure: {:?}", pressure);
 
-        // Do something with the temperature and pressure values
-        // For example, print them to a serial console (if available)
-        info!("Pressure: {:?}", pressure);
-
-        embassy_time::Timer::after(embassy_time::Duration::from_millis(1000)).await;
+            embassy_time::Timer::after(embassy_time::Duration::from_millis(1000)).await;
+        }
     }
 }

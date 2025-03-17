@@ -3,7 +3,7 @@
 [package]
 # Package metadata
 name = "ms5611-i2c"  # The name of the package
-version = "0.1.0"  # The current version of the package
+version = "0.2.0"  # The current version of the package
 authors = ["Martin Westermeier <mwesterm@mailbox.org>"]  # The authors of the package
 license = "MIT OR Apache-2.0"  # The license under which the package is distributed
 description = "no_std Library for the MS5611 barometric pressure sensor only for I2C with embassy"  # A short description of the package
@@ -20,10 +20,9 @@ readme = "README.md"  # The path to the README file
 
 [dependencies]
 # Dependencies for the package
-embedded-hal-bus = { version = "0.3" }  # Hardware Abstraction Layer for bus
+#embedded-hal-bus = { version = "0.3" }  # Hardware Abstraction Layer for bus
 embedded-hal-async = { version = "1.0", optional = true }  # Async version of embedded-hal
 embedded-hal = { version = "1.0", optional = true }  # Embedded Hardware Abstraction Layer
-embassy-futures = "0.1.1"  # Futures for the Embassy framework
 embassy-time = { version = "0.4" }  # Time utilities for the Embassy framework
 byteorder = { version = "1.1.0", default-features = false }  # Utilities for working with byte order
 maybe-async = "0.2"  # Conditional async/await support
@@ -45,21 +44,20 @@ log = { version = "0.4.26" }  # Logging library
 
 [features]
 # Feature flags for conditional compilation
-default = ["is_sync"]  # Default features
-is_async = ["dep:embedded-hal-async", "embedded-hal-bus/async"]  # Async feature
-is_sync = ["dep:embedded-hal", "maybe-async/is_sync"]  # Sync feature
+async = ["dep:embedded-hal-async"]  # Async feature
+sync = ["dep:embedded-hal", "maybe-async/is_sync"]  # Sync feature
 
 [[example]]
 # Example for synchronous usage on ESP32-C3
 name = "esp32-c3-sync"
 path = "examples/esp32-c3-sync.rs"
-required-features = ["is_sync"]
+required-features = ["sync"]
 
 [[example]]
 # Example for asynchronous usage on ESP32-C3
 name = "esp32-c3-async"
 path = "examples/esp32-c3-async.rs"
-required-features = ["is_async"]
+required-features = ["async"]
 
 [profile.dev]
 # Development build profile

@@ -3,13 +3,13 @@
 //! MS5611 pressure sensor driver using I2C.
 //!
 //! This library supports both synchronous and asynchronous modes of operation.
-//! The mode is selected using the `is_sync` and `is_async` features. Only one
+//! The mode is selected using the `sync` and `async` features. Only one
 //! of these features can be enabled at a time.
 //!
 //! # Features
 //!
-//! - `is_sync`: Enables synchronous mode using `embedded_hal` traits.
-//! - `is_async`: Enables asynchronous mode using `embedded_hal_async` traits.
+//! - `sync`: Enables synchronous mode using `embedded_hal` traits.
+//! - `async`: Enables asynchronous mode using `embedded_hal_async` traits.
 //!
 //! # Example
 //!
@@ -63,21 +63,21 @@
 //! - `OversamplingRatio::get_delay`: Returns the delay required for the given oversampling ratio.
 //! - `OversamplingRatio::addr_modifier`: Returns the address modifier for the given oversampling ratio.
 
-#[cfg(all(feature = "is_sync", feature = "is_async"))]
-compile_error!("Feature 'is_sync' and 'is_async' cannot be enabled at the same time");
+#[cfg(all(feature = "sync", feature = "async"))]
+compile_error!("Feature 'sync' and 'async' cannot be enabled at the same time");
 
-#[cfg(not(any(feature = "is_sync", feature = "is_async")))]
-compile_error!("Either 'is_sync' or 'is_async' must be enabled");
+#[cfg(not(any(feature = "sync", feature = "async")))]
+compile_error!("Either 'sync' or 'async' must be enabled");
 
 use byteorder::{BigEndian, ByteOrder};
-#[cfg(feature = "is_sync")]
+#[cfg(feature = "sync")]
 use embassy_time::Delay;
 use embassy_time::{Duration, Timer};
-#[cfg(feature = "is_sync")]
+#[cfg(feature = "sync")]
 use embedded_hal::delay::DelayNs;
-#[cfg(feature = "is_sync")]
+#[cfg(feature = "sync")]
 use embedded_hal::i2c::I2c;
-#[cfg(feature = "is_async")]
+#[cfg(feature = "async")]
 use embedded_hal_async::i2c::I2c;
 use maybe_async::maybe_async;
 #[derive(Debug)]
@@ -189,13 +189,13 @@ where
     /// if no address is provided, the default address `0x77` is used.
     ///
     #[maybe_async]
-    pub async fn new(mut i2c: I, i2c_addr: Option<u8>) -> Self
+    pub async fn new(mut i2c: I, i2c_addr: Option<u8>) -> Result<Self, MS5611Error>
     where
         I: I2c,
     {
         let address = i2c_addr.unwrap_or(0x77);
-        let prom = Self::read_prom(&mut i2c, address).await.unwrap();
-        Ms5611 { i2c, address, prom }
+        let prom = Self::read_prom(&mut i2c, address).await?;
+        Ok(Ms5611 { i2c, address, prom })
     }
 
     #[maybe_async]
@@ -206,7 +206,7 @@ where
             .map_err(|_| MS5611Error::I2CError)?;
         // Haven't tested for the lower time bound necessary for the chip to
         // start functioning again. But, it does require some amount of sleep.
-        let _ = Timer::after(Duration::from_millis(500)).await;
+        let _x = Timer::after(Duration::from_millis(500)).await;
         Ok(())
     }
 
@@ -315,9 +315,9 @@ where
         let delay = osr.get_delay();
 
         if delay > 0 {
-            #[cfg(feature = "is_sync")]
+            #[cfg(feature = "sync")]
             Delay.delay_ms(delay);
-            #[cfg(feature = "is_async")]
+            #[cfg(feature = "async")]
             let _res = Timer::after(Duration::from_millis(delay.into())).await;
         }
 
@@ -334,9 +334,9 @@ where
             .await
             .map_err(|_| MS5611Error::I2CError)?;
         if delay > 0 {
-            #[cfg(feature = "is_sync")]
+            #[cfg(feature = "sync")]
             Delay.delay_ms(delay);
-            #[cfg(feature = "is_async")]
+            #[cfg(feature = "async")]
             let _res = Timer::after(Duration::from_millis(delay.into())).await;
         }
         self.i2c

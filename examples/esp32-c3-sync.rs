@@ -28,7 +28,14 @@ async fn main(_spawner: embassy_executor::Spawner) {
     .unwrap()
     .with_sda(peripherals.GPIO6)
     .with_scl(peripherals.GPIO7);
-    let mut sensor = Ms5611::new(i2c, None);
+    let sensor = Ms5611::new(i2c, None);
+    if sensor.is_err() {
+        info!("Failed to initialize sensor!");
+        return;
+    }
+    let mut sensor = sensor.unwrap();
+    info!("Sensor initialized!");
+
     info!("Sensor initialized!");
     loop {
         info!("loop");
