@@ -9,4 +9,5 @@ All notable changes to this project will be documented in this file.
 ## [0.2.0]  2025-03-17
 - MS5611::new returns now Result<Self, MS5611Error>>
 - features renamed to "sync" and "async
+- switch default to "async"
 - cleanup  dependencies

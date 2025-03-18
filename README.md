@@ -15,5 +15,6 @@ Based on https://github.com/braincore/ms5611-rs
 
 * Per datasheet, computes the second order temperature compensation.
 * Validates the PROM's checksum.
+* runs with embassy-hal
 * supports embedded_hal_async::i2c::I2c
 

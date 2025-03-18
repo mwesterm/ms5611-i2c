@@ -44,6 +44,7 @@ log = { version = "0.4.26" }  # Logging library
 
 [features]
 # Feature flags for conditional compilation
+default = ["async"]  # Default features
 async = ["dep:embedded-hal-async"]  # Async feature
 sync = ["dep:embedded-hal", "maybe-async/is_sync"]  # Sync feature
 
